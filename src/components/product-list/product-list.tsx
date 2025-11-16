@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { Product } from "types";
 import { ProductCard } from "./product-card";
 import { listProducts } from "@/app/services/list-products";
@@ -17,33 +17,27 @@ export const ProductList = ({ products: initialProducts }: Props) => {
 
   useEffect(() => {
     if (!loader.current) return;
+
     const observer = new IntersectionObserver(
-      (entries) => {
+      async (entries) => {
         if (entries[0].isIntersecting && !loading) {
-          setPage((prev) => prev + 1);
+          setLoading(true);
+          try {
+            const nextPage = page + 1;
+            const newProducts = await listProducts({ page: nextPage });
+            setProducts((prev) => [...prev, ...newProducts]);
+            setPage(nextPage);
+          } finally {
+            setLoading(false);
+          }
         }
       },
       { threshold: 1 }
     );
+
     observer.observe(loader.current);
     return () => observer.disconnect();
-  }, [loading]);
-
-  useEffect(() => {
-    if (page === 1) return;
-
-    const fetchProducts = async () => {
-      setLoading(true);
-      try {
-        const newProducts = await listProducts({ page });
-        setProducts((prev) => [...prev, ...newProducts]);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProducts();
-  }, [page]);
+  }, [loading, page]);
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
