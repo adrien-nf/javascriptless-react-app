@@ -4,6 +4,7 @@ import { useRef, useState, useEffect } from "react";
 import { Product } from "types";
 import { ProductCard } from "./product-card";
 import { listProducts } from "@/app/services/list-products";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 type Props = {
   products: Product[];
@@ -46,8 +47,12 @@ export const ProductList = ({ products: initialProducts }: Props) => {
           <ProductCard product={product} key={product.id} />
         ))}
       </ul>
-      <div ref={loader} className="h-10">
-        {loading && "Loading..."}
+      <div ref={loader}>
+        {loading && (
+          <div className="h-10 my-8 flex justify-center items-center">
+            <AiOutlineLoading3Quarters className="animate-spin text-gray-500 w-6 h-6" />
+          </div>
+        )}
       </div>
     </div>
   );
