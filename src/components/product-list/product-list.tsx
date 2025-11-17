@@ -32,7 +32,9 @@ export const ProductList = ({
           setLoading(true);
           try {
             const nextPage = page + 1;
-            const newProducts = await listProducts({ page: nextPage });
+            const { data: newProducts } = await listProducts({
+              page: nextPage,
+            });
             setProducts((prev) => [...prev, ...newProducts]);
             setPage(nextPage);
           } finally {
