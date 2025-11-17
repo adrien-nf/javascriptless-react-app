@@ -9,7 +9,7 @@ export const Pagination = ({ page, pageAmount }: PaginationProps) => {
   const finalPages = usePages(page, pageAmount);
 
   return (
-    <div className="flex gap-2 mt-8">
+    <div className="flex gap-2">
       {finalPages.map((n, i) =>
         n === "..." ? (
           <span
