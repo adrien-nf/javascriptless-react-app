@@ -1,26 +1,28 @@
 import { Product } from "@/types";
 import { Stars } from "./stars";
-import { useCartContext } from "@/contexts";
+import { addToCartAction } from "@/actions";
 import { toast } from "sonner";
 
 export function ProductCard({ product }: { product: Product }) {
-  const { title, rating, images, price, tags, description, id } = product;
+  const { id, title, price, images, rating, description, tags } = product;
 
-  const { addToCart } = useCartContext();
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    if (!window) return;
+    e.preventDefault();
 
-  const handleAdd = () => {
-    addToCart({ id, title, price });
-    toast.success(`${title} added to cart!`, {
-      position: "bottom-center",
-    });
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+    await addToCartAction(formData);
+
+    toast.success(`${title} added to cart!`);
   };
 
   return (
     <li className="border rounded-lg p-4 shadow hover:shadow-lg transition-shadow flex flex-col bg-white">
       <img
         src={images?.[0] ?? "/placeholder.png"}
-        alt={`${title} - $${price}`}
-        className="w-full h-48 object-cover rounded-md mb-4 text-black"
+        alt={title}
+        className="w-full h-48 object-cover rounded-md mb-4"
       />
       <div className="flex flex-col flex-1">
         <div className="flex-1">
@@ -31,17 +33,24 @@ export function ProductCard({ product }: { product: Product }) {
           <Stars rating={rating} />
           <p className="text-sm text-gray-600 my-4">{description}</p>
         </div>
-        <div className="flex items-center justify-between mt-4">
+        <form
+          action={addToCartAction}
+          className="flex items-center justify-between mt-4"
+          onSubmit={handleSubmit}
+        >
+          <input type="hidden" name="productId" value={id} />
+          <input type="hidden" name="productName" value={title} />
+          <input type="hidden" name="productPrice" value={price} />
           <span className="text-gray-800 font-bold text-lg">
             ${price.toFixed(2)}
           </span>
           <button
+            type="submit"
             className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 transition-colors"
-            onClick={() => handleAdd()}
           >
             Add to Cart
           </button>
-        </div>
+        </form>
       </div>
     </li>
   );

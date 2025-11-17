@@ -1,6 +1,3 @@
-"use client";
-
-import { CartProvider } from "@/contexts";
 import { Toaster } from "sonner";
 
 export function Wrapper({ children }: { children: React.ReactNode }) {
@@ -8,7 +5,7 @@ export function Wrapper({ children }: { children: React.ReactNode }) {
     <>
       <Toaster position="top-right" />
 
-      <CartProvider>{children}</CartProvider>
+      {children}
     </>
   );
 }
