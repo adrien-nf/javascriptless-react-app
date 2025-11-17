@@ -1,11 +1,18 @@
 import { ProductList } from "../components/product-list";
 import { listProducts } from "./services/list-products";
 
-export default async function Page() {
-  const products = await listProducts({
-    page: 1,
-  });
+export default async function Page({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string }>;
+}) {
+  const { page } = await searchParams;
 
-  return <ProductList products={products} />;
+  const currentPage = Number(page || 1);
+
+  const { data, pageAmount } = await listProducts({ page: currentPage });
+
+  return (
+    <ProductList products={data} page={currentPage} pageAmount={pageAmount} />
+  );
 }
-
