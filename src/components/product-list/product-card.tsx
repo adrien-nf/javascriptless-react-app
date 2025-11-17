@@ -1,8 +1,19 @@
 import { Product } from "@/types";
 import { Stars } from "./stars";
+import { useCartContext } from "@/contexts";
+import { toast } from "sonner";
 
 export function ProductCard({ product }: { product: Product }) {
-  const { title, rating, images, price, tags, description } = product;
+  const { title, rating, images, price, tags, description, id } = product;
+
+  const { addToCart } = useCartContext();
+
+  const handleAdd = () => {
+    addToCart({ id, title, price });
+    toast.success(`${title} added to cart!`, {
+      position: "bottom-center",
+    });
+  };
 
   return (
     <li className="border rounded-lg p-4 shadow hover:shadow-lg transition-shadow flex flex-col bg-white">
@@ -20,11 +31,16 @@ export function ProductCard({ product }: { product: Product }) {
           <Stars rating={rating} />
           <p className="text-sm text-gray-600 my-4">{description}</p>
         </div>
-        <div>
-          <hr className="my-4" />
+        <div className="flex items-center justify-between mt-4">
           <span className="text-gray-800 font-bold text-lg">
             ${price.toFixed(2)}
           </span>
+          <button
+            className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 transition-colors"
+            onClick={() => handleAdd()}
+          >
+            Add to Cart
+          </button>
         </div>
       </div>
     </li>
