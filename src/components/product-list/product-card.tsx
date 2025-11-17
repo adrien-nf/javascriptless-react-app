@@ -14,7 +14,9 @@ export function ProductCard({ product }: { product: Product }) {
     const formData = new FormData(form);
     await addToCartAction(formData);
 
-    toast.success(`${title} added to cart!`);
+    toast.success(`${title} added to cart!`, {
+      position: "bottom-center",
+    });
   };
 
   return (
