@@ -3,7 +3,7 @@
 import { useRef, useState, useEffect } from "react";
 import { Product } from "types";
 import { ProductCard } from "./product-card";
-import { listProducts } from "@/app/services/list-products";
+import { listProducts } from "@/services/list-products";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { Pagination } from "../pagination";
 
