@@ -9,7 +9,7 @@ export function ProductCard({ product }: { product: Product }) {
       <img
         src={images?.[0] ?? "/placeholder.png"}
         alt={`${title} - $${price}`}
-        className="w-full h-48 object-cover rounded-md mb-4"
+        className="w-full h-48 object-cover rounded-md mb-4 text-black"
       />
       <div className="flex flex-col flex-1">
         <div className="flex-1">
